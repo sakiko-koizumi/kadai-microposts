@@ -6,11 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateMicropostsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+   
     public function up()
     {
         Schema::create('microposts', function (Blueprint $table) {
@@ -23,12 +19,7 @@ class CreateMicropostsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+       public function down()
     {
         Schema::dropIfExists('microposts');
     }
