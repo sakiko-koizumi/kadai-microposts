@@ -4,29 +4,35 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+
 use App\Http\Controllers\Controller;
+
+use App\Micropost;
 
 class MicropostsController extends Controller
 {
-    public function index()
+        public function index()
     {
         $data = [];
         if (\Auth::check()) {
             $user = \Auth::user();
-            $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
+            $microposts = $user->feed_microposts()->orderBy('created_at', 'desc')->paginate(10);
 
             $data = [
                 'user' => $user,
                 'microposts' => $microposts,
             ];
+            
             $data += $this->counts($user);
-            return view('users.show', $data);
-        }else {
-            return view('welcome');
+            return view('users.show',$data);
+            
+        }else{
+            return view('welcome', $data);
         }
     }
     
-       public function store(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'content' => 'required|max:191',
@@ -39,7 +45,7 @@ class MicropostsController extends Controller
         return redirect('/');
     }
     
-       public function destroy($id)
+    public function destroy($id)
     {
         $micropost = \App\Micropost::find($id);
 
@@ -49,4 +55,20 @@ class MicropostsController extends Controller
 
         return redirect()->back();
     }
-}
+    
+    public function fab($id)
+    {
+        $user = User::find($id);
+        $fab = $user->fab()->paginate(10);
+
+        $data = [
+            'user' => $user,
+            'fab' => $fab,
+        ];
+
+        $data += $this->counts($user);
+
+        return view('microposts.fab', $data);
+    }
+    
+    }

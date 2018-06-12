@@ -36,8 +36,7 @@ public function microposts()
     }
     
     public function follow($userId)
-{
-    
+    {
     $exist = $this->is_following($userId);
     
     $its_me = $this->id == $userId;
@@ -50,10 +49,10 @@ public function microposts()
         $this->followings()->attach($userId);
         return true;
     }
-}
+    }
 
 public function unfollow($userId)
-{
+    {
     
     $exist = $this->is_following($userId);
     
@@ -68,11 +67,11 @@ public function unfollow($userId)
         
         return false;
     }
-}
+    }
 
-public function is_following($userId) {
+    public function is_following($userId) {
     return $this->followings()->where('follow_id', $userId)->exists();
- }
+    }
  
   public function feed_microposts()
     {
@@ -80,5 +79,43 @@ public function is_following($userId) {
         $follow_user_ids[] = $this->id;
         return Micropost::whereIn('user_id', $follow_user_ids);
     }
- 
+    
+    public function fab()
+    {
+        return $this->belongsToMany(Micropost::class, 'favourites', 'user_id', 'favourite_id')->withTimestamps();
+    }
+    
+    public function favourites($micropostId)
+    {
+    $exist = $this->is_favourite($micropostId);
+    
+
+    if ($exist) {
+
+        return false;
+    } else {
+       
+        $this->fab()->attach($micropostId);
+        return true;
+    }
+    }
+    
+    public function unfavourites($micropostId)
+    {
+    $exist = $this->is_favourite($micropostId);
+    
+    if ($exist) {
+       
+        $this->fab()->detach($micropostId);
+        return true;
+    } else {
+        
+        return false;
+    }
+    }
+    
+    public function is_favourite($micropostId) {
+    return $this->fab()->where('favourite_id', $micropostId)->exists();
+    }
+    
 }

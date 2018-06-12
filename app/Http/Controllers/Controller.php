@@ -14,31 +14,32 @@ abstract class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function counts($user) {
-        $count_microposts = $user->microposts()->count();
+        $count_microposts = $user->feed_microposts()->count();
         $count_followings = $user->followings()->count();
         $count_followers = $user->followers()->count();
-
-
+        $count_fab = $user->fab()->count();
+       
         return [
             'count_microposts' => $count_microposts,
             'count_followings' => $count_followings,
             'count_followers' => $count_followers,
+            'count_fab'=>$count_fab,
         ];
     }
     
-     public function index()
-    {
-        $data = [];
-        if (\Auth::check()) {
-            $user = \Auth::user();
-            $microposts = $user->feed_microposts()->orderBy('created_at', 'desc')->paginate(10);
+     //public function index()
+    //{
+        //$data = [];
+        //if (\Auth::check()) {
+            //$user = \Auth::user();
+            //$microposts = $user->feed_microposts()->orderBy('created_at', 'desc')->paginate(10);
 
-            $data = [
-                'user' => $user,
-                'microposts' => $microposts,
-            ];
-        }
-        return view('welcome', $data);
-    }
+            //$data = [
+                //'user' => $user,
+                //'microposts' => $microposts,
+            //];
+        //}
+        //return view('welcome', $data);
+    //}
     
 }
