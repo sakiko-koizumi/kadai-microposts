@@ -15,7 +15,7 @@ class RegisterController extends Controller
 
    
      
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
